@@ -4,7 +4,7 @@ load_prc_file_data("", "audio-library-name null\nevdev-no-udev 1\nwant-directtoo
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import (
     Vec3, Point3, AmbientLight, DirectionalLight, LColor,
-    WindowProperties, CardMaker, BitMask32, Texture
+    WindowProperties, CardMaker, BitMask32, Texture, Shader
 )
 from panda3d.bullet import BulletWorld
 
@@ -43,7 +43,7 @@ class RoverSimulator(ShowBase):
     def _setup_lighting(self):
         # High ambient = light, natural-looking shadows
         ambient = AmbientLight("ambient")
-        ambient.setColor(LColor(0.90, 0.90, 0.90, 1))
+        ambient.setColor(LColor(0.45, 0.47, 0.52, 1))
         self.render.setLight(self.render.attachNewNode(ambient))
 
         # Directional sun light
@@ -108,6 +108,11 @@ class RoverSimulator(ShowBase):
         main_mask = self.cam.node().getCameraMask()
         self.terrain.np.hide(BitMask32.allOn())
         self.terrain.np.show(main_mask)
+        # Apply PCF soft-shadow shader to terrain — overrides the auto-shader
+        # for this node only, giving smooth Poisson-disk sampled shadows instead
+        # of the single bilinear sample that produces hard pixelated edges.
+        pcf = Shader.load(Shader.SL_GLSL, "shadow_pcf.vert", "shadow_pcf.frag")
+        self.terrain.np.setShader(pcf)
 
         self.rover = Rover(self.render, self.bullet_world, start_pos=(0, 0, 3))
         self.cam_ctrl = CameraController(self, self.rover)
