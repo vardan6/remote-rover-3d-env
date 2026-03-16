@@ -21,8 +21,8 @@ def _build_heightmap():
             # two overlapping sine waves for gentle rolling terrain
             x = col / (n - 1)
             y = row / (n - 1)
-            h = (math.sin(x * 6.0) * math.cos(y * 5.0) * 0.4 +
-                 math.sin(x * 13.0 + 1.0) * math.sin(y * 11.0) * 0.15)
+            h = (math.sin(x * 3.5) * math.cos(y * 3.0) * 0.18 +
+                 math.sin(x * 7.0 + 1.0) * math.sin(y * 6.0) * 0.06)
             r.append(h)
         hmap.append(r)
     return hmap
