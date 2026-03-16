@@ -112,6 +112,9 @@ class Terrain:
         node = BulletRigidBodyNode("terrain_body")
         node.addShape(shape)
         self.body_np = self.np.attachNewNode(node)
+        # Scale physics shape from pixel units (n×n) to world units (TERRAIN_SIZE×TERRAIN_SIZE)
+        xy_scale = TERRAIN_SIZE / (n - 1)
+        self.body_np.setScale(xy_scale, xy_scale, 1.0)
         # Bullet centres the heightfield at its midpoint height
         mid_h = (min_h + max_h) / 2.0
         self.body_np.setPos(0, 0, mid_h)
