@@ -38,24 +38,27 @@ def _build_body_node():
         (-hw,-hl,-hh),(hw,-hl,-hh),(hw,hl,-hh),(-hw,hl,-hh),
         (-hw,-hl, hh),(hw,-hl, hh),(hw,hl, hh),(-hw,hl, hh),
     ]
+    # Each face: (vertex indices, colour, per-face normal)
     faces = [
-        ((0,1,2,3), LColor(0.80,0.20,0.10,1)),
-        ((4,7,6,5), LColor(0.80,0.20,0.10,1)),
-        ((0,4,5,1), LColor(0.90,0.30,0.05,1)),  # front (brighter)
-        ((1,5,6,2), LColor(0.60,0.15,0.05,1)),
-        ((2,6,7,3), LColor(0.55,0.13,0.04,1)),
-        ((3,7,4,0), LColor(0.60,0.15,0.05,1)),
+        ((0,1,2,3), LColor(0.80,0.20,0.10,1), ( 0, 0,-1)),  # bottom
+        ((4,7,6,5), LColor(0.80,0.20,0.10,1), ( 0, 0, 1)),  # top
+        ((0,4,5,1), LColor(0.90,0.30,0.05,1), ( 0,-1, 0)),  # front (brighter)
+        ((1,5,6,2), LColor(0.60,0.15,0.05,1), ( 1, 0, 0)),  # right
+        ((2,6,7,3), LColor(0.55,0.13,0.04,1), ( 0, 1, 0)),  # back
+        ((3,7,4,0), LColor(0.60,0.15,0.05,1), (-1, 0, 0)),  # left
     ]
-    fmt   = GeomVertexFormat.get_v3c4()
+    fmt   = GeomVertexFormat.get_v3n3c4()
     vdata = GeomVertexData("rover_body", fmt, Geom.UHStatic)
     vdata.setNumRows(24)
     vw = GeomVertexWriter(vdata, "vertex")
+    nw = GeomVertexWriter(vdata, "normal")
     cw = GeomVertexWriter(vdata, "color")
     tris = GeomTriangles(Geom.UHStatic)
     base = 0
-    for face_verts, col in faces:
+    for face_verts, col, norm in faces:
         for vi in face_verts:
             vw.addData3(*verts[vi])
+            nw.addData3(*norm)
             cw.addData4(col)
         tris.addVertices(base, base+1, base+2)
         tris.addVertices(base, base+2, base+3)

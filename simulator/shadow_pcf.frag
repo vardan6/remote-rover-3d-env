@@ -64,7 +64,7 @@ void main() {
     vec3  N        = normalize(vNormal);
     vec3  L        = normalize(p3d_LightSource[0].position.xyz); // toward sun, view-space
     float diff     = max(dot(N, L), 0.0);
-    float shadow   = sampleShadow(vShadowCoord, 0.001);
+    float shadow   = sampleShadow(vShadowCoord, 0.0006);
 
     vec4 ambient   = p3d_LightModel.ambient              * vColor;
     vec4 diffuse   = p3d_LightSource[0].diffuse * diff * shadow * vColor;

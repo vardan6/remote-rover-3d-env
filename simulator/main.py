@@ -108,13 +108,13 @@ class RoverSimulator(ShowBase):
         main_mask = self.cam.node().getCameraMask()
         self.terrain.np.hide(BitMask32.allOn())
         self.terrain.np.show(main_mask)
-        # Apply PCF soft-shadow shader to terrain — overrides the auto-shader
-        # for this node only, giving smooth Poisson-disk sampled shadows instead
-        # of the single bilinear sample that produces hard pixelated edges.
+        self.rover = Rover(self.render, self.bullet_world, start_pos=(0, 0, 3))
+
+        # Apply PCF soft-shadow shader to both terrain and rover, replacing the
+        # auto-shader's single bilinear sample with 16-tap Poisson disk PCF.
         pcf = Shader.load(Shader.SL_GLSL, "shadow_pcf.vert", "shadow_pcf.frag")
         self.terrain.np.setShader(pcf)
-
-        self.rover = Rover(self.render, self.bullet_world, start_pos=(0, 0, 3))
+        self.rover.chassis_np.setShader(pcf)
         self.cam_ctrl = CameraController(self, self.rover)
         self.gui = TelemetryGUI()
 
