@@ -111,7 +111,7 @@ class Terrain:
             for col in range(n):
                 h    = self._hmap[row][col]
                 gray = (h - min_h) / (max_h - min_h) if max_h != min_h else 0.5
-                img.setGray(col, row, gray)
+                img.setGray(col, n - 1 - row, gray)
 
         shape = BulletHeightfieldShape(img, half_range, ZUp)
         shape.setUseDiamondSubdivision(True)

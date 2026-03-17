@@ -21,7 +21,7 @@ WHEEL_SEGMENTS = 32     # polygon count for wheel cylinder mesh — purely visua
 CHASSIS_MASS      = 130.0  # kg — heavier = more inertia (resists flipping/flopping) but
                              #      needs more engine force; also lowers effective suspension
                              #      frequency (softer feel for same spring stiffness)
-MAX_ENGINE_FORCE  = 1600.0  # N per wheel (all 4 driven) — total thrust = 4 × this value.
+MAX_ENGINE_FORCE  = 500.0  # N per wheel (all 4 driven) — total thrust = 4 × this value.
                              #      Scale proportionally when changing CHASSIS_MASS so
                              #      acceleration stays roughly constant (a = F/m)
 MAX_BRAKE_FORCE   = 300.0   # N per wheel when coasting with no throttle input.
@@ -80,8 +80,7 @@ CHASSIS_ANGULAR_FACTOR  = 0.2    # [0..1] scales torques that pitch (front/back 
 # Shifts the rendered body mesh relative to the chassis centre-of-mass node.
 # Physics is unaffected — this is purely a cosmetic adjustment.
 # Positive = body appears higher on the chassis; negative = lower / buried in wheels.
-BODY_VISUAL_Z_OFFSET = HALF_H   # shifts body UP so its bottom face sits at the CoM (z=0 in
-                                  # chassis space), matching the collision shape bottom exactly.
+BODY_VISUAL_Z_OFFSET = -HALF_H * 2  # shifts body DOWN; negative = lower on the chassis.
 
 # ── Chassis collision shape offset ───────────────────────────────────────────
 # The BulletBoxShape is added with a +Z offset so the physics box sits ABOVE
